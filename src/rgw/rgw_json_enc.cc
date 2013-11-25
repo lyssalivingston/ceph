@@ -396,6 +396,8 @@ void RGWUserInfo::dump(Formatter *f) const
   }
   encode_json("default_placement", default_placement, f);
   encode_json("placement_tags", placement_tags, f);
+  encode_json("bucket_quota", bucket_quota, f);
+  encode_json("temp_url_key", temp_url_key, f);
 }
 
 
@@ -446,6 +448,22 @@ void RGWUserInfo::decode_json(JSONObj *obj)
   system = (__u8)sys;
   JSONDecoder::decode_json("default_placement", default_placement, obj);
   JSONDecoder::decode_json("placement_tags", placement_tags, obj);
+  JSONDecoder::decode_json("bucket_quota", bucket_quota, obj);
+  JSONDecoder::decode_json("temp_url_key", temp_url_key, obj);
+}
+
+void RGWQuotaInfo::dump(Formatter *f) const
+{
+  f->dump_bool("enabled", enabled);
+  f->dump_int("max_size_kb", max_size_kb);
+  f->dump_int("max_objects", max_objects);
+}
+
+void RGWQuotaInfo::decode_json(JSONObj *obj)
+{
+  JSONDecoder::decode_json("max_size_kb", max_size_kb, obj);
+  JSONDecoder::decode_json("max_objects", max_objects, obj);
+  JSONDecoder::decode_json("enabled", enabled, obj);
 }
 
 void rgw_bucket::dump(Formatter *f) const

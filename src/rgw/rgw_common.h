@@ -423,11 +423,13 @@ struct RGWUserInfo
   __u8 system;
   string default_placement;
   list<string> placement_tags;
+  RGWQuotaInfo bucket_quota;
+  string temp_url_key;
 
   RGWUserInfo() : auid(0), suspended(0), max_buckets(RGW_DEFAULT_MAX_BUCKETS), op_mask(RGW_OP_TYPE_ALL), system(0) {}
 
   void encode(bufferlist& bl) const {
-     ENCODE_START(13, 9, bl);
+     ENCODE_START(15, 9, bl);
      ::encode(auid, bl);
      string access_key;
      string secret_key;
@@ -462,6 +464,8 @@ struct RGWUserInfo
      ::encode(system, bl);
      ::encode(default_placement, bl);
      ::encode(placement_tags, bl);
+     ::encode(bucket_quota, bl);
+     ::encode(temp_url_key, bl);
      ENCODE_FINISH(bl);
   }
   void decode(bufferlist::iterator& bl) {
@@ -517,6 +521,12 @@ struct RGWUserInfo
       ::decode(system, bl);
       ::decode(default_placement, bl);
       ::decode(placement_tags, bl); /* tags of allowed placement rules */
+    }
+    if (struct_v >= 14) {
+      ::decode(bucket_quota, bl);
+    }
+    if (struct_v >= 15) {
+     ::decode(temp_url_key, bl);
     }
     DECODE_FINISH(bl);
   }
