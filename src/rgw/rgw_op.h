@@ -403,7 +403,7 @@ public:
 class RGWSetTempUrl : public RGWOp {
 protected:
   int ret;
-  string temp_url_key;
+  map<int, string> temp_url_keys;
 public:
   RGWSetTempUrl() : ret(0) {}
 
